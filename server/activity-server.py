@@ -31,7 +31,7 @@ from browse_core import get_level_data as _tree_data  # kept for compat
 
 app = Flask(__name__)
 CACHE_DB = os.path.expanduser("~/.hermes/data/activity-cache.db")
-HTML_PATH = os.path.join(os.path.dirname(__file__), "..", "static", "index.html")
+HTML_PATH = os.path.join(os.path.dirname(__file__), "activity-browser-live.html")
 
 # ── Filter Config (extensible — add entries here, zero frontend changes) ──
 FILTERS_CONFIG = [
