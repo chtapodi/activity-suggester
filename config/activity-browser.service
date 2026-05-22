@@ -1,0 +1,14 @@
+[Unit]
+Description=Activity Browser Web Server
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/mango/workspace/activity-suggester/server/activity-server.py --port 8092
+WorkingDirectory=/home/mango/workspace/activity-suggester/server
+Restart=always
+RestartSec=3
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target
