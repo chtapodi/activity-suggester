@@ -169,6 +169,11 @@ def apply_gates(row, c):
     if wind=="moderate-max" and c["wind"]=="strong": return False
     if row["noise"]=="loud" and _get_tod(c["current_hour"]) in ("night","late-night"): return False
     if row["noise"]=="moderate" and _get_tod(c["current_hour"])=="late-night": return False
+    # Daylight gate: outdoor activities require daylight
+    if c.get("is_daylight") is False:
+        loc = row["location"] or "anywhere"
+        if loc in ("nearby-outdoors", "trail", "specific-location", "range"):
+            return False
     return True
 
 # ── Intent resolution ──────────────────────────────────────────────

@@ -9,6 +9,8 @@ WorkingDirectory=/home/mango/workspace/activity-suggester/server
 Restart=always
 RestartSec=3
 Environment=PYTHONUNBUFFERED=1
+Environment=HOMEASSISTANT_URL=http://192.168.50.84:8123
+EnvironmentFile=/home/mango/.hermes/secrets/ha-env
 
 [Install]
 WantedBy=default.target

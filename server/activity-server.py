@@ -28,6 +28,7 @@ from flask import Flask, jsonify, request, send_file
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from browse_core import resolve_rhythm
 from browse_core import get_level_data as _tree_data  # kept for compat
+from ha_context import get_ha_context
 
 app = Flask(__name__)
 CACHE_DB = os.path.expanduser("~/.hermes/data/activity-cache.db")
@@ -114,8 +115,18 @@ def get_current_state():
     day = now.strftime("%a")
     hour = now.hour
     energy, mental, is_work, is_dinner, is_late = resolve_rhythm(day, hour)
-    return {"day": day, "hour": hour, "energy": energy, "mental": mental,
-            "is_work": is_work, "is_dinner": is_dinner, "is_late": is_late}
+    state = {"day": day, "hour": hour, "energy": energy, "mental": mental,
+             "is_work": is_work, "is_dinner": is_dinner, "is_late": is_late}
+
+    # ── Merge live HA context ──
+    ha = get_ha_context()
+    state["temperature"] = ha.get("temperature")
+    state["is_daylight"] = ha.get("is_daylight")
+    state["occupied_rooms"] = ha.get("occupied_rooms", [])
+    state["at_home"] = ha.get("at_home", True)
+    state["ha_available"] = ha.get("ha_available", False)
+
+    return state
 
 # ── API v1 ──
 

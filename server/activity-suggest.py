@@ -33,10 +33,17 @@ from browse_core import resolve_rhythm
 from activity_rhythm import LATE_NIGHT_SCREEN_PENALTY
 from browse_session import BrowseSession
 
+# ── HA integration (optional, graceful fallback) ──
+try:
+    from ha_context import get_daylight as _get_daylight
+except ImportError:
+    def _get_daylight():
+        return None  # gate will pass-through if unknown
+
 # ── Configuration ──────────────────────────────────────────────────
 VAULT_ROOT = os.environ.get("OBSIDIAN_VAULT_PATH", os.path.expanduser("~/workspace/Obsidian"))
-ACTIVITIES_GLOB = f"{VAULT_ROOT}/Projects/Areas/Life/Activities/**/*.md"
-PROJECTS_GLOB = f"{VAULT_ROOT}/Projects/Areas/Build/**/*.md"
+ACTIVITIES_GLOB = f"{VAULT_ROOT}/Areas/Life/Activities/**/*.md"
+PROJECTS_GLOB = f"{VAULT_ROOT}/Areas/Build/**/*.md"
 CACHE_DIR = os.path.expanduser("~/.hermes/data")
 CACHE_DB = os.path.join(CACHE_DIR, "activity-cache.db")
 
@@ -1011,6 +1018,7 @@ def cmd_browse(args):
         "weather": args.weather,
         "wind": args.wind,
         "temperature": None,
+        "is_daylight": _get_daylight(),
         "social": args.social,
         "day_of_week": day,
         "current_hour": hour,
