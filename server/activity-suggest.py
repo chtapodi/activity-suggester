@@ -41,7 +41,7 @@ except ImportError:
         return None  # gate will pass-through if unknown
 
 # ── Configuration ──────────────────────────────────────────────────
-VAULT_ROOT = os.environ.get("OBSIDIAN_VAULT_PATH", os.path.expanduser("~/workspace/Obsidian"))
+VAULT_ROOT = os.environ.get("OBSIDIAN_VAULT_PATH", os.path.expanduser("~/vaults/Projects"))
 ACTIVITIES_GLOB = f"{VAULT_ROOT}/Areas/Life/Activities/**/*.md"
 PROJECTS_GLOB = f"{VAULT_ROOT}/Areas/Build/**/*.md"
 CACHE_DIR = os.path.expanduser("~/.hermes/data")
@@ -503,11 +503,11 @@ def _discover_tasks(conn, seen_names: set) -> int:
                     raw = f.read()
                 for m in re.finditer(r'^[\s]*-[\s]*\[[\s]*\][\s]*(.+?)$', raw, re.MULTILINE):
                     text = m.group(1).strip()
-                    text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'', text)
-                    text = re.sub(r'`([^`]+)`', r'', text)
+                    text = re.sub(r'\[([^\]]+)\]\([^)]+\)', '', text)
+                    text = re.sub(r'`([^`]+)`', '', text)
                     text = re.sub(r'🔥|🔁|⏫|⏬|🔽|⚠️|✅|📝', '', text).strip()
-                    text = re.sub(r'\[\[([^\]|]+)\]\]', r'', text)
-                    text = re.sub(r'\[\[([^\]]+)\|([^\]]+)\]\]', r'', text)
+                    text = re.sub(r'\[\[([^\]|]+)\]\]', '', text)
+                    text = re.sub(r'\[\[([^\]]+)\|([^\]]+)\]\]', '', text)
                     if not text or len(text) < 5 or len(text) > 100:
                         continue
                     if text in tasks:

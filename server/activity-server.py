@@ -80,28 +80,8 @@ FILTERS_CONFIG = [
     },
 ]
 
-# ── Intent/Category mappings (server-side for query filtering) ──
-INTENT_MAP = {"creative":"make","code":"make","making":"make","flying":"make","culinary":"make",
-              "household":"fix","garden":"fix","admin":"fix","physical":"move","learning":"learn",
-              "relaxation":"relax","entertainment":"relax","social":"move"}
-WORK_TYPE_INTENT = {"llm-coding":"make","cad-3d":"make","hardware-build":"make",
-                    "sysadmin-config":"fix","research-planning":"learn","documentation":"make"}
-ACTIVITY_INTENT_OVERRIDES = {
-    "FPV Flying":"move","Fixed Wing Flying":"move","Sim Practice":"learn",
-    "Cooking and Baking":"make","Meal Prep":"fix","Foraging":"move",
-    "Mushroom Cultivation":"make","Coffee and Tea Brewing":"relax",
-    "Server Maintenance":"fix","Workout":"move","Rock Climbing":"move",
-    "Hiking":"move","EBike Ride":"move","Running":"move","Yoga and Stretching":"move",
-    "Farmers Market":"move","Museum Visit":"learn","Restaurant Outing":"relax","Coffee Walk":"relax",
-}
-
-def _get_intent(row):
-    name = row["name"]
-    if name in ACTIVITY_INTENT_OVERRIDES:
-        return ACTIVITY_INTENT_OVERRIDES[name]
-    if row["is_project"] and row["work_type"]:
-        return WORK_TYPE_INTENT.get(row["work_type"], "make")
-    return INTENT_MAP.get(row["category"], "make")
+# ── Intent/Category mappings (imported from browse_core) ──
+from browse_core import INTENT_MAP, WORK_TYPE_INTENT, ACTIVITY_INTENT_OVERRIDES, _get_intent
 
 # ── Database ──
 def get_conn():
